@@ -1,0 +1,63 @@
+{% extends "base.html" %} 
+{% block title %}Shopping Mart{% endblock %} 
+{% block content %} 
+
+{% load static %}
+<img class="cover-img" src="{% static 'shop/cover1.png'%}" />
+
+<div id="category-container">
+
+    {% for cat in categories %}
+    <a href="/category/{{cat.name}}"><div class="category-c">{{cat.name}}</div></a>
+    {% endfor %}
+</div>
+
+<div class="center margin-gap">
+    <div class="heading">BEST SELLER</div>
+    <div class="sub-heading">TOP PRODUCTS OF THE WEEK</div>
+</div>
+
+<div class="center margin-gap">
+
+    {% for prod in products %}
+
+    <a href="/product/{{prod.id}}">
+    <div class="product-c">
+        <img src="/media/{{prod.product_image}}" />
+        <div class="product-company">{{prod.company.name}}</div>
+        <div class="product-details">
+            <div class="product-rating">
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star checked"></span>
+                <span class="fa fa-star"></span>
+                <span class="fa fa-star"></span>
+                </div>
+            <div class="product-name">{{prod.name}}</div>
+            <div class="product-price"><span class="fa fa-inr"></span> {{prod.price}}</div>
+        </div>
+    </div>
+</a>
+    {% endfor %}
+
+    <div class="center margin-gap">
+        <div class="heading">BRANDS</div>
+        <div class="sub-heading">TOP BRANDS OF THE WEEK</div>
+    </div>
+
+    <div id="category-container">
+
+        {% for com in companies %}
+        <div class="company-c"><img src="/media/{{com.logo}}" /></div>
+        {% endfor %}
+
+        {% for u in users %}
+        <div>{{u.email}}</div>
+        {% endfor %}
+    </div>
+
+
+</div>
+
+
+{% endblock %} 

@@ -1,0 +1,5 @@
+{% if messages %}
+        {% for message in messages %}
+        <div onclick="hideMessage(this)" class="message-c">{{message}} X</div>
+            {% endfor %}
+    {% endif %}

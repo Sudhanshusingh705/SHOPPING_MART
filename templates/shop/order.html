@@ -1,0 +1,149 @@
+{% extends "base.html" %} 
+{% block title %}Order | ShoppingMart{% endblock %} 
+{% block content %} 
+
+<script>
+
+    console.log(JSON.parse(localStorage.getItem("products")));
+
+    function changeQty(id, c) {
+
+        product = JSON.parse(window.localStorage.getItem('products'));
+
+        for(var i = 0; i < product.length; i++) {
+            if(id == product[i].id) {
+                if(c == 0 && product[i].qty > 0) { 
+                    product[i].qty = "" + (parseInt(product[i].qty, 10) - 1);
+                } else if(c == 1)
+                product[i].qty = "" + (parseInt(product[i].qty, 10) + 1);
+            }
+        }
+
+        localStorage.setItem('products', JSON.stringify(product));
+        loadCart();
+
+    }
+
+function loadCart() {
+
+    var submitted = "{{submitted}}";
+
+    if(submitted == 0) {
+        
+    product = JSON.parse(window.localStorage.getItem('products'));
+
+    if(product.length > 0) {
+    
+    var x = '<div style="font-weight: bold; padding: 10px; border-bottom: 1px solid #eee;">Your Cart</div><div>';
+    var total = 0, prodsid = '';
+    for(var i = 0; i < product.length; i++) {
+    x += '<div class="display-row div-products"><div class="display-column width-300"><div>' + product[i].name + '</div><div class="font-14" style="margin-top: 4px;">QTY  <span class="qty" onclick="changeQty(' + product[i].id + ', 0)">-</span> ' + product[i].qty + ' <span class="qty" onclick="changeQty(' + product[i].id + ', 1)">+</span></div></div><div class="width-100"><i class="fa fa-inr"></i>&nbsp;' + (product[i].qty * product[i].price) + '</div></div>';
+    total += product[i].qty * product[i].price;
+    if(i == (product.length - 1))
+    prodsid += product[i].id;
+    else prodsid += product[i].id + '@';
+    }
+
+    x += '</div><div class="display-row div-total"><div class="width-300">Total Amount</div><div class="width-100"><i class="fa fa-inr"></i>&nbsp;' + total + '</div></div>';
+
+    document.getElementById('id_total').value = total;
+    document.getElementById('id_products_id').value = prodsid;
+    document.getElementById('id_order_id').value = Math.floor(Date.now() / 1000);
+    document.getElementById("cart-c").innerHTML = x;
+
+    } else {
+        document.getElementById("cc").innerHTML = "You haven't added anything to your cart! Check products here&nbsp;<a href='/'>here</a>.";
+    }
+    } else {
+        localStorage.clear();
+        document.getElementById("cc").innerHTML = "You have successfully placed your order! Check account for details&nbsp;<a href='/account'>here</a>.";
+    }
+}
+
+
+</script>
+
+<style>
+
+    .display-row {
+        display: flex; flex-direction: row;
+    }
+    
+    .display-column {
+        display: flex; flex-direction: column;
+    }
+
+    .div-total {
+        padding: 10px;
+    }
+
+    .div-products {
+        padding: 10px; border-bottom: 1px solid #fafafa;
+    }
+
+    .width-300 {
+        width: 300px;
+    }
+
+    .width-100 {
+        width: 100px; text-align: right;
+    }
+
+    .font-14 {
+        font-size: 14px;
+    }
+
+    .qty {
+        padding: 2px 8px; cursor: pointer; background: #f7f8fa;
+    }
+
+
+</style>
+
+<div style="background: #f7f8fa; padding: 5px 0px;">
+
+<div id="cc" style="max-width: 1150px; margin: 20px auto; display: flex; flex-direction: row;">
+    <div id="left-tab" style="display: flex; flex-direction: column; width: 500px;">
+        
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div style="background-color: white; padding: 10px; margin-bottom: 10px;">
+            <p>{{form.address.label_tag}} {{form.address}} {{form.address.errors}}</p>
+            <p>{{form.pincode.label_tag}} {{form.pincode}} {{form.pincode.errors}}</p>
+            <p style="display: none;">
+                <input type="number" name="total" value="0" maxlength="1000" required="" id="id_total">
+                <input type="text" name="products_id" value="" maxlength="1000" required="" id="id_products_id">
+                <input type="number" name="discount" value="0" maxlength="1000" required="" id="id_discount">
+                <input type="number" name="tax" value="0" maxlength="1000" required="" id="id_tax">
+                <input type="number" name="order_id" value="0" maxlength="1000" required="" id="id_order_id">
+                <input type="number" name="price" value="0" maxlength="1000" required="" id="id_price">
+            </p>
+            </div>
+            <button style="background: #007bff; color: white; border: 0; padding: 10px 15px; border-radius: 5px; outline: 0;" type="submit">Place Order</button>
+        </form>
+        
+    </div>
+    <div class="display-column" id="right-tab" style="background-color: white; padding: 10px; width: 400px; margin-left: 30px;">
+
+        <div id="cart-c">
+            
+       
+        </div>
+
+
+    </div>
+
+</div>
+</div>
+
+
+<script>
+if(localStorage.getItem('products') === null) {
+    document.getElementById("cc").innerHTML = "You haven't added anything to your cart! Check products here&nbsp;<a href='/'>here</a>.";
+} else {
+loadCart();
+}
+
+</script>
+
+{% endblock %} 

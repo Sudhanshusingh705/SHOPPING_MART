@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Signup | ShoppingMart{% endblock %} 
+{% block content %}
+<div style="background: #f7f8fa; padding: 50px;">
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button style="background-color:#F4EB16; color:blue" class="btn btn-outline-info" type="submit">Sign Up</button>
+    </form>
+
+    If you already have an account <a href="/login"><strong>login</strong></a> instead.
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %} 
+{% block title %}{{category}} | ShoppingMart{% endblock %} 
+{% block content %} 
+
+<div style="background: #f7f8fa; padding: 5px 0px;">
+
+    <div class="container">
+        Home / {{category}}
+    </div>
+
+</div>
+
+<div style="max-width: 1150px; margin: 0px auto; display: flex; flex-direction: row;">
+    <div id="left-tab" style="display: flex; flex-direction: column; width: 200px;">
+        
+        <div style="width: 200px;">
+            <div style="padding: 20px 30px; border-bottom: 1px solid #fafafa;">
+                Categories
+            </div>
+            <div>
+                {% for cat in categories %}
+                <a href="/category/{{cat.name}}"><div>{{cat.name}}</div></a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="width: 200px;">
+            <div style="padding: 20px 30px; border-bottom: 1px solid #fafafa;">
+                Brands
+            </div>
+            <div>
+                {% for comp in companies %}
+                <a href="/brands/{{comp.name}}"><div>{{comp.name}}</div></a>
+                {% endfor %}
+            </div>
+        </div>
+        
+    </div>
+    <div id="right-tab" style="display: flex; flex-direction: column;">
+        {{category}}
+
+        <div>
+            {% for prod in products %}
+            
+            <a href="/product/{{prod.id}}">
+            <div class="product-c">
+                <img src="/media/{{prod.product_image}}" />
+                <div class="product-company">{{prod.company.name}}</div>
+                <div class="product-details">
+                    <div class="product-rating">
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star checked"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        </div>
+                    <div class="product-name">{{prod.name}}</div>
+                    <div class="product-price"><span class="fa fa-inr"></span> {{prod.price}}</div>
+                </div>
+            </div>
+        </a>
+        
+            {% endfor %}
+        
+        </div>
+
+
+    </div>
+
+</div>
+
+
+{% endblock %} 

@@ -1,0 +1,134 @@
+{% extends "base.html" %} 
+{% block title %}{{product.name}} | ShoppingMart{% endblock %} 
+{% block content %} 
+
+<script>
+
+    function addProduct() {
+        const prod = {
+            id: "{{product.id}}",
+            name: "{{product.name}}",
+            price: "{{product.price}}",
+            qty: "1"
+        }
+
+        var prods = [];
+        var exists = 0;
+
+        if(localStorage.getItem('products') === null) {
+            prods[0] = prod;
+        } else {
+            prods = JSON.parse(localStorage.getItem('products'));
+            for(var i = 0; i < prods.length; i++) {
+                if(prods[i].id == prod.id) {
+                    exists = 1;
+                    if(prods[i].qty == 0)
+                    prods[i].qty = 1;
+                }  
+            }
+            if(exists == 0)
+            prods[prods.length] = prod; 
+        }
+
+        localStorage.setItem('products', JSON.stringify(prods));
+        window.location = '/order/';
+
+    }
+
+
+</script>
+
+<style>
+    #add-cart {
+        background: #2879fe; cursor: pointer; display: flex; color: white; border-radius: 5px; padding: 10px 0px; justify-content: center; margin-right: 10px; width: 40%;
+    }
+
+    #add-cart:hover {
+        background: #f7f8fa; cursor: pointer; display: flex; color: #2879fe; border-radius: 5px; padding: 10px 0px; justify-content: center; margin-right: 10px; width: 40%;  
+    }
+
+
+</style>
+
+<div style="background: #f7f8fa; padding: 5px 0px;">
+
+    <div class="container">
+        Home / {{product.name}}
+    </div>
+
+</div>
+
+<div style="max-width: 1150px; margin: 20px auto; display: flex; flex-direction: row;">
+    <div id="left-tab" style="display: flex; flex-direction: column; width: 500px;">
+        
+       <img style="width: 100%;" src="/media/{{product.product_image}}" />
+        
+    </div>
+    <div id="right-tab" style="display: flex; width: 600px; flex-direction: column; margin-left: 30px;">
+      
+        <div>SKU : {{product.id}}</div>
+        <div style="font-size: 30px;">{{product.name}}</div>
+        <div style="font-size: 42px; color: #2879fe;">{{product.price}}</div>
+        <div>Tax Included</div>
+
+        <div style="display: flex; flex-direction: row; margin: 10px 0px;">
+        <div id="add-cart" onclick="addProduct();">
+            Add to Cart
+        </div>
+        </div>
+
+        <img style="margin: 20px 0px;" src="/static/shop/payment.png" />
+
+        <div>
+            Category : {{product.category.name}} <br>
+            Brand : {{product.company.name}}<br><br>
+            <b>DESCRIPTION</b><br><br>
+            {{product.description}}
+        </div>
+
+
+    </div>
+
+</div>
+
+<div style="background: #f7f8fa; padding: 5px 0px; text-align: center;">
+
+    <img src="/static/shop/social.png" />
+
+</div>
+
+<div style="max-width: 1150px; margin: 20px auto;">
+
+    <b>RELATED PRODUCTS</b>
+
+    <div style="margin-top: 20px;">
+        {% for prod in related %}
+        
+        <a href="/product/{{prod.id}}">
+        <div class="product-c">
+            <img src="/media/{{prod.product_image}}" />
+            <div class="product-company">{{prod.company.name}}</div>
+            <div class="product-details">
+                <div class="product-rating">
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star checked"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    </div>
+                <div class="product-name">{{prod.name}}</div>
+                <div class="product-price"><span class="fa fa-inr"></span> {{prod.price}}</div>
+            </div>
+        </div>
+    </a>
+    
+        {% endfor %}
+    
+    </div>
+
+
+
+</div>
+
+
+{% endblock %} 
